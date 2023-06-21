@@ -132,39 +132,5 @@
 </script>
 
 <style scoped>
-    .btnDiv{
-        text-align: center;
-    }
-    .btn{
-        padding: 7.5px 16px;
-        font-size: 16px;
-        margin-left : 5px;
-    }
-    .listDiv{
-        display: flex;
-        margin-top: 10px;
-    }
-    .pending{
-        background: #EAEEF4;
-        height: 600px;
-        overflow-y: auto;
-        width: 30%;
-    }
-    .processing{
-        background: #EAEEF4;
-        height: 600px;
-        overflow-y: auto;
-        width: 30%;
-        margin-left: 5%;
-    }
-    .complete{
-        background: #EAEEF4;
-        height: 600px;
-        overflow-y: auto;
-        width: 30%;
-        margin-left: 5%;
-    }
-    .center{
-        text-align: center;
-    }
+    
 </style>
