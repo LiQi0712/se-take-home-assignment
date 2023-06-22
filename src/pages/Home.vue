@@ -27,7 +27,7 @@
 </template>
   
 <script setup>
-    import {ref, watch} from 'vue'
+    import {ref} from 'vue';
     import Pending from '@/components/Pending.vue';
     import Processing from '@/components/Processing.vue';
     import Complete from '@/components/Complete.vue';
@@ -35,8 +35,8 @@
     const orderList = ref([])
     const robotList = ref([])
     const completeList = ref([])
-    let orderID = 0;
-    let robotID = 0;
+    let orderID = 0
+    let robotID = 0
 
     const addNormal = () =>{
         orderID++
