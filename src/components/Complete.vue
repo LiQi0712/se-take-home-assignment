@@ -1,5 +1,5 @@
 <template>
-    <p>{{ orderID }} <sup v-show="isVip">VIP</sup></p>
+    <p>{{ orderID }} <sup v-if="isVip">VIP</sup></p>
 </template>
   
 <script setup>

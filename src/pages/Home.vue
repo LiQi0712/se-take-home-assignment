@@ -75,7 +75,8 @@
             robotID: robotID,
             orderID: null,
             isVip: null,
-            pendingTime: null
+            pendingTime: null,
+            remainingTime: null
         })
     }
 
@@ -111,12 +112,13 @@
                         robotList.value[i].orderID = temp.orderID
                         robotList.value[i].isVip = temp.isVip
                         robotList.value[i].pendingTime = temp.pendingTime
+                        robotList.value[i].remainingTime = temp.pendingTime
                         orderList.value.shift()
                     }
                 }
                 else{
-                    robotList.value[i].pendingTime--
-                    if(robotList.value[i].pendingTime == 0){
+                    robotList.value[i].remainingTime--
+                    if(robotList.value[i].remainingTime == 0){
                         completeList.value.push({
                             orderID: robotList.value[i].orderID,
                             isVip: robotList.value[i].isVip
@@ -124,6 +126,7 @@
                         robotList.value[i].orderID = null
                         robotList.value[i].isVip = null
                         robotList.value[i].pendingTime = null
+                        robotList.value[i].remainingTime = null
                     }
                 }
             }
