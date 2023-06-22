@@ -57,13 +57,14 @@
         sortOrder()
     }
 
+    //back of vip
     const sortOrder = () =>{
-        let ordercount = orderList.value.length - 1
-        for(let i=0; i<ordercount; i++){
+        let orderCount = orderList.value.length - 1
+        for(let i=0; i<orderCount; i++){
             if(orderList.value[i].isVip == false){
                 let temp = orderList.value[i]
-                orderList.value[i] = orderList.value[ordercount]
-                orderList.value[ordercount] = temp
+                orderList.value[i] = orderList.value[orderCount]
+                orderList.value[orderCount] = temp
                 break
             }
         }
@@ -82,20 +83,21 @@
 
     const dropBot = () =>{
         robotID--
-        let robotcount = robotList.value.length - 1
-        if(robotList.value[robotcount].orderID != null){
-            if(robotList.value[robotcount].isVip == true){
+        let robotCount = robotList.value.length - 1
+        //a robot has processing order
+        if(robotList.value[robotCount].orderID != null){
+            if(robotList.value[robotCount].isVip == true){
                 orderList.value.unshift({
-                    orderID: robotList.value[robotcount].orderID,
-                    isVip: robotList.value[robotcount].isVip,
-                    pendingTime: robotList.value[robotcount].pendingTime
+                    orderID: robotList.value[robotCount].orderID,
+                    isVip: robotList.value[robotCount].isVip,
+                    pendingTime: robotList.value[robotCount].pendingTime
                 })
             }
             else{
                 orderList.value.push({
-                    orderID: robotList.value[robotcount].orderID,
-                    isVip: robotList.value[robotcount].isVip,
-                    pendingTime: robotList.value[robotcount].pendingTime
+                    orderID: robotList.value[robotCount].orderID,
+                    isVip: robotList.value[robotCount].isVip,
+                    pendingTime: robotList.value[robotCount].pendingTime
                 })
                 sortOrder()
             }
@@ -104,9 +106,12 @@
     }
 
     setInterval(()=>{
+        //have robot
         if(robotID > 0){
             for(let i = 0; i < robotID; i++){
+                //a robot no processing order
                 if(robotList.value[i].orderID == null){
+                    //if have order, put order to robot
                     if(orderList.value.length > 0){
                         let temp = orderList.value[0]
                         robotList.value[i].orderID = temp.orderID
@@ -116,9 +121,12 @@
                         orderList.value.shift()
                     }
                 }
+                //if robot has procrssing order
                 else{
                     robotList.value[i].remainingTime--
+                    //if sub time and remaining time is 0
                     if(robotList.value[i].remainingTime == 0){
+                        //put to complete list and clear order data in robot
                         completeList.value.push({
                             orderID: robotList.value[i].orderID,
                             isVip: robotList.value[i].isVip

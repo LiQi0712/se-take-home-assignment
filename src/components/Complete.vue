@@ -7,7 +7,7 @@
 </script>
 
 <style scoped>
-sup{
-    color: red;
-}
+    sup{
+        color: red;
+    }
 </style>
