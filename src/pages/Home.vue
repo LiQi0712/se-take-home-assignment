@@ -10,7 +10,9 @@
             <div class="pending">
                 <h3 class="center">Pending</h3>
                 <hr/>
-                <Pending v-for="order in orderList" :key="order.orderID" v-bind="order"></Pending>
+                <Pending v-for="order in orderList" :key="order.orderID" v-bind="order">
+                    <button @click="orderDelete(order)">Delete</button>
+                </Pending>
             </div>
             <div class="processing">
                 <h3 class="center">Processing</h3>
@@ -59,15 +61,27 @@
 
     //back of vip
     const sortOrder = () =>{
-        let orderCount = orderList.value.length - 1
-        for(let i=0; i<orderCount; i++){
-            if(orderList.value[i].isVip == false){
-                let temp = orderList.value[i]
-                orderList.value[i] = orderList.value[orderCount]
-                orderList.value[orderCount] = temp
-                break
+        const compareFunc = (a,b) =>{
+            if(a.isVip == true && b.isVip == false){
+                return -1
+            }
+            else if(a.isVip == false && b.isVip == true){
+                return 1
+            }
+            else{
+                return a.orderID - b.orderID
             }
         }
+        orderList.value.sort(compareFunc)
+        // let orderCount = orderList.value.length - 1
+        // for(let i=0; i<orderCount; i++){
+        //     if(orderList.value[i].isVip == false){
+        //         let temp = orderList.value[i]
+        //         orderList.value[i] = orderList.value[orderCount]
+        //         orderList.value[orderCount] = temp
+        //         break
+        //     }
+        // }
     }
 
     const addBot = () =>{
@@ -140,6 +154,14 @@
             }
         }
     },1000)
+
+    const orderDelete = (order) => {
+        for(let i=0; i<orderList.value.length; i++){
+            if(orderList.value[i].orderID == order.orderID){
+                orderList.value.splice(i,1)
+            }
+        }
+    }
 </script>
 
 <style scoped>
