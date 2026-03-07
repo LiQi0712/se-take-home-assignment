@@ -1,18 +1,19 @@
 McDonald's Order Management System - Simulation Results
 
-[22:38:18] System initialized with 0 bots
-[22:38:21] Bot #1 created
-[22:38:21] Bot #1 picked up VIP Order #1002
-[22:38:22] Bot #2 created
-[22:38:22] Bot #2 picked up Normal Order #1001
-[22:38:31] Bot #1 completed Order #1002
-[22:38:31] Bot #1 picked up Normal Order #1003
-[22:38:32] Bot #2 completed Order #1001
-[22:38:33] Bot #2 picked up VIP Order #1004
-[22:38:41] Bot #1 completed Order #1003
-[22:38:43] Bot #2 removed
-[22:38:43] Bot #2 completed Order #1004
-[22:38:44] 
-[22:38:44] Final Status:
-[22:38:44] Active Bots: 1
-[22:38:44] Pending Orders: 0
+[00:15:25] Bot #1 created
+[00:15:25] Bot #2 created
+[00:15:25] Bot #1 picked up Normal Order #1001
+[00:15:25] Bot #2 picked up VIP Order #1002
+[00:15:35] Bot #1 completed Order #1001
+[00:15:35] Bot #1 picked up VIP Order #1004
+[00:15:35] Bot #2 completed Order #1002
+[00:15:35] Bot #2 picked up Normal Order #1003
+[00:15:37] Bot #2 stopped
+[00:15:37] Bot #2 removed
+[00:15:45] Bot #1 completed Order #1004
+[00:15:45] Bot #1 picked up Normal Order #1003
+[00:15:55] Bot #1 completed Order #1003
+[00:15:55] 
+Final Status:
+[00:15:55] Active Bots: 1
+[00:15:55] Pending Orders: 0

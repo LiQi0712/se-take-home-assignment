@@ -33,13 +33,22 @@ class OrderProcessor {
   }
 
   removeBot() {
-
     const bot = this.bots.pop()
-
     if (!bot) return
 
-    this.logger.log(`Bot #${bot.id} removed`)
+    if (bot.order) {
+      this.returnOrder(bot.order)
+    }
 
+    bot.stop()
+
+    this.logger.log(`Bot #${bot.id} removed`)
+  }
+
+  returnOrder(order) {
+    order.status = "PENDING"
+    if (order.type === "VIP") this.vip.unshift(order)
+    else this.normal.unshift(order)
   }
 
   nextOrder() {
