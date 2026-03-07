@@ -1,48 +1,50 @@
-const OrderQueue = require("./src/orderQueue")
 const Logger = require("./src/logger")
-const BotManager = require("./src/botManager")
-const OrderController = require("./src/orderController")
+const OrderProcessor = require("./src/services/orderProcessor")
+const OrderController = require("./src/controllers/orderController")
+const BotController = require("./src/controllers/botController")
 
 const logger = new Logger()
-const queue = new OrderQueue()
-const botManager = new BotManager(queue, logger)
-const controller = new OrderController(queue, botManager, logger)
+
+const processor = new OrderProcessor(logger)
+
+const orderController = new OrderController(processor)
+const botController = new BotController(processor, logger)
 
 logger.log("System initialized with 0 bots")
 
-controller.newNormalOrder()
+orderController.createNormal()
 
 setTimeout(() => {
-  controller.newVipOrder()
+  orderController.createVIP()
 }, 1000)
 
 setTimeout(() => {
-  controller.newNormalOrder()
+  orderController.createNormal()
 }, 2000)
 
 setTimeout(() => {
-  botManager.addBot()
+  botController.addBot()
 }, 3000)
 
 setTimeout(() => {
-  botManager.addBot()
+  botController.addBot()
 }, 4000)
 
 setTimeout(() => {
-  controller.newVipOrder()
+  orderController.createVIP()
 }, 15000)
 
 setTimeout(() => {
-  botManager.removeBot()
+  botController.removeBot()
 }, 25000)
 
 setTimeout(() => {
 
   logger.log("")
   logger.log("Final Status:")
-  logger.log(`- Active Bots: ${botManager.activeBots()}`)
-  logger.log(`- Pending Orders: ${queue.pendingCount()}`)
+  logger.log(`Active Bots: ${processor.bots.length}`)
+  logger.log(`Pending Orders: ${processor.vip.length + processor.normal.length}`)
 
   process.exit(0)
-  
+
 }, 26000)
