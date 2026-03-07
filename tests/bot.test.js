@@ -1,25 +1,38 @@
 const Bot = require('../src/models/bot')
 const Order = require('../src/models/order')
 
-jest.useFakeTimers()
+jest.useFakeTimers() // 使用虚拟定时器加速测试
 
-const logger = {
-  log: jest.fn()
-}
+describe('Bot', () => {
+  let logger
 
-test('Bot should process order', () => {
+  beforeEach(() => {
+    logger = { log: jest.fn() }
+  })
 
-  const bot = new Bot(1, logger)
-  const order = new Order(1001, "Normal")
+  test('should process order and mark COMPLETE', () => {
+    const bot = new Bot(1, logger)
+    const order = new Order(1001, 'Normal')
+    const callback = jest.fn()
 
-  const callback = jest.fn()
+    bot.process(order, callback)
 
-  bot.process(order, callback)
+    // advance timers
+    jest.advanceTimersByTime(10000)
 
-  jest.runAllTimers()
+    expect(order.status).toBe('COMPLETE')
+    expect(bot.order).toBeNull()
+    expect(callback).toHaveBeenCalled()
+  })
 
-  expect(order.status).toBe("COMPLETE")
-  expect(bot.order).toBe(null)
-  expect(callback).toHaveBeenCalled()
+  test('stop should clear timer and reset order', () => {
+    const bot = new Bot(1, logger)
+    const order = new Order(1001, 'Normal')
+    const callback = jest.fn()
 
+    bot.process(order, callback)
+    bot.stop()
+
+    expect(bot.order).toBeNull()
+  })
 })
