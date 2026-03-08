@@ -83,8 +83,7 @@ describe('Processor', () => {
 
     orders.forEach(o => processor.addOrder(o));
 
-    // advance enough time to complete all orders
-    jest.advanceTimersByTime(2000);
+    jest.runAllTimers();
 
     const completed = orders.filter(o => o.status === 'COMPLETED').length;
 
