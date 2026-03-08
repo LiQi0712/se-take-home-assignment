@@ -1,45 +1,35 @@
-// index.js
-const Logger = require("./src/logger")
-const OrderProcessor = require("./src/services/orderProcessor")
-const Bot = require("./src/models/bot")
-const Order = require("./src/models/order")
+const Logger = require('./src/logger')
+const Bot = require('./src/models/bot')
+const Order = require('./src/models/order')
+const Processor = require('./src/services/processor')
 
 const logger = new Logger()
-const processor = new OrderProcessor(logger)
+const processor = new Processor(logger)
 
-// 创建 bots
-const bot1 = new Bot(1, logger)
-const bot2 = new Bot(2, logger)
+processor.addBot(new Bot(1))
+processor.addBot(new Bot(2))
 
-processor.addBot(bot1)
-processor.addBot(bot2)
+processor.addOrder(new Order(1001, 'Normal'))
+processor.addOrder(new Order(1002, 'VIP'))
+processor.addOrder(new Order(1003, 'Normal'))
+processor.addOrder(new Order(1004, 'VIP'))
 
-// 创建订单
-const order1 = new Order(1001, "Normal")
-const order2 = new Order(1002, "VIP")
-const order3 = new Order(1003, "Normal")
-const order4 = new Order(1004, "VIP")
-
-processor.addOrder(order1)
-processor.addOrder(order2)
-processor.addOrder(order3)
-processor.addOrder(order4)
-
-// 模拟 removeBot（延迟 12 秒，确保有订单处理中）
 setTimeout(() => {
-  processor.removeBot()  // 移除最后一个 bot
+  processor.removeBot(2)
 }, 12000)
 
-// 打印最终状态
-const checkInterval = setInterval(() => {
-  const pendingOrders = processor.vip.length + processor.normal.length
-  const busyBots = processor.bots.some(bot => bot.order !== null)
+setTimeout(() => {
+  const totalOrders = processor.orders.length;
+  const vipCount = processor.orders.filter(o => o.type === 'VIP').length;
+  const normalCount = processor.orders.filter(o => o.type === 'Normal').length;
+  const completedCount = processor.orders.filter(o => o.status === 'COMPLETED').length;
+  const pendingCount = processor.orders.filter(o => o.status === 'PENDING').length;
 
-  if (pendingOrders === 0 && !busyBots) {
-    logger.log("\nFinal Status:")
-    logger.log(`Active Bots: ${processor.bots.length}`)
-    logger.log(`Pending Orders: ${pendingOrders}`)
-    clearInterval(checkInterval)
-    process.exit(0)
-  }
-}, 1000)
+  logger.log('\nFinal Status:')
+  logger.log(`- Total Orders Processed: ${totalOrders} (${vipCount} VIP, ${normalCount} Normal)`)
+  logger.log(`- Orders Completed: ${completedCount}`)
+  logger.log(`- Active Bots: ${processor.bots.length}`)
+  logger.log(`- Pending Orders: ${pendingCount}`)
+
+  process.exit(0)
+}, 31000)
