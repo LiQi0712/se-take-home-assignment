@@ -32,7 +32,7 @@ describe('Processor', () => {
 
     // Normal完成
     jest.advanceTimersByTime(1000);
-    expect(bot.status).toBe('IDLE'); // bot idle 代表完成 dispatch
+    expect(normalOrder.status).toBe('COMPLETED');
   });
 
   test('should complete order and mark bot idle', () => {
@@ -89,5 +89,29 @@ describe('Processor', () => {
 
     expect(completed).toBe(4);
     expect(processor.bots.every(b => b.status === 'IDLE')).toBe(true);
+  });
+
+  test('remaining bot continues processing after removing one bot', () => {
+    const bot1 = new Bot(1);
+    const bot2 = new Bot(2);
+
+    processor.addBot(bot1);
+    processor.addBot(bot2);
+
+    const order1 = new Order(1, 'Normal');
+    const order2 = new Order(2, 'Normal');
+    const order3 = new Order(3, 'Normal');
+
+    processor.addOrder(order1);
+    processor.addOrder(order2);
+    processor.addOrder(order3);
+
+    processor.removeBot(2);
+
+    jest.runAllTimers();
+
+    expect(order1.status).toBe('COMPLETED');
+    expect(order2.status).toBe('COMPLETED');
+    expect(order3.status).toBe('COMPLETED');
   });
 });
