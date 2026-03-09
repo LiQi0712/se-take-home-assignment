@@ -13,7 +13,7 @@ class Processor {
 
   addBot(bot) {
     this.bots.push(bot)
-    bot.status = 'IDLE'
+
     this.logger.log(`Bot #${bot.id} created`)
     this.dispatch()
   }
@@ -44,25 +44,42 @@ class Processor {
     return pending[0]
   }
 
+  getIdleBot() {
+    return this.bots.find(b => b.status === 'IDLE')
+  }
+
+  assign(bot, order) {
+    bot.status = 'PROCESSING'
+    bot.order = order
+    order.status = 'PROCESSING'
+
+    this.logger.log(
+      `Bot #${bot.id} picked up ${order.type} Order #${order.id}`
+    )
+
+    bot.timer = setTimeout(() => {
+      order.status = 'COMPLETED'
+      bot.status = 'IDLE'
+      bot.order = null
+
+      this.logger.log(
+        `Bot #${bot.id} completed Order #${order.id}`
+      )
+
+      this.dispatch()
+    }, this.processTime)
+  }
+
   dispatch() {
-    this.bots.forEach(bot => {
-      if (bot.status !== 'IDLE') return
+    while (true) {
+      const bot = this.getIdleBot()
+      if (!bot) break
+
       const order = this.nextOrder()
-      if (!order) return
+      if (!order) break
 
-      bot.status = 'PROCESSING'
-      bot.order = order
-      order.status = 'PROCESSING'
-
-      this.logger.log(`Bot #${bot.id} picked up ${order.type} Order #${order.id}`)
-
-      bot.timer = setTimeout(() => {
-        order.status = 'COMPLETED'
-        bot.status = 'IDLE'
-        this.logger.log(`Bot #${bot.id} completed Order #${order.id}`)
-        this.dispatch()
-      }, this.processTime)
-    })
+      this.assign(bot, order)
+    }
   }
 }
 
