@@ -28,6 +28,7 @@ class Processor {
         bot.order.status = 'PENDING'
       }
     }
+    bot.order = null
     this.logger.log(`Bot #${bot.id} removed`)
     this.bots.splice(index, 1)
     this.dispatch()
@@ -61,6 +62,7 @@ class Processor {
       order.status = 'COMPLETED'
       bot.status = 'IDLE'
       bot.order = null
+      bot.timer = null
 
       this.logger.log(
         `Bot #${bot.id} completed Order #${order.id}`
@@ -71,14 +73,14 @@ class Processor {
   }
 
   dispatch() {
-    while (true) {
-      const bot = this.getIdleBot()
-      if (!bot) break
+    let bot = this.getIdleBot()
+    let order = this.nextOrder()
 
-      const order = this.nextOrder()
-      if (!order) break
-
+    while (bot && order) {
       this.assign(bot, order)
+
+      bot = this.getIdleBot()
+      order = this.nextOrder()
     }
   }
 }
